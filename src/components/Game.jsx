@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Blocks } from 'react-loader-spinner';
 import { generateRandomIds, fetchPokemon, shuffleArray } from '../utils/pokemonUtils';
 import Card from './Card';
 import Scoreboard from './Scoreboard';
@@ -70,6 +71,15 @@ export default function Game() {
   return (
     <>
       <Scoreboard currentScore={currentScore} highScore={highScore}></Scoreboard>
+      <Blocks
+        height="80"
+        width="80"
+        color="#4fa94d"
+        ariaLabel="blocks-loading"
+        wrapperStyle={{}}
+        wrapperClass="blocks-wrapper"
+        visible={!fetchError && pokemonList.length === 0}
+      />
       {fetchError && <p className="error-message">{fetchError}</p>}
       <section className="pokemon-grid">
         {pokemonList.map((pokemon) => (
