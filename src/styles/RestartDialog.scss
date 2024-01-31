@@ -1,0 +1,92 @@
+$blue-button-color: #096efb;
+
+@mixin button-highlight($color) {
+  &:focus-visible,
+  &:hover {
+    background-color: darken($color, 10%);
+    cursor: pointer;
+  }
+
+  &:active {
+    background-color: darken($color, 15%);
+    transform: scale(0.96);
+  }
+}
+
+.dialog-overlay {
+  background-color: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  inset: 0;
+  animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dialog {
+  background-color: #242424;
+  border: 2px solid lighten($color: #242424, $amount: 10%);
+  border-radius: 12px;
+  box-shadow:
+    hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
+    hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90vw;
+  max-width: 500px;
+  max-height: 85vh;
+  padding: 20px;
+  animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  &:focus {
+    outline: none;
+  }
+
+  &__title {
+    font-weight: bold;
+    margin: 0;
+  }
+
+  &__desc {
+    color: #c6c6c6;
+    margin-bottom: 20px;
+  }
+
+  .button-container {
+    display: flex;
+    gap: 8px;
+    justify-content: end;
+  }
+}
+
+.button {
+  border: 0;
+  border-radius: 4px;
+  color: #fff;
+  padding: 8px 12px;
+  transition: 0.2s transform ease-in-out;
+
+  &--restart {
+    background-color: $blue-button-color;
+    @include button-highlight($blue-button-color);
+  }
+}
+
+@keyframes overlayShow {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes contentShow {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
