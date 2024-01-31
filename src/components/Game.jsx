@@ -70,13 +70,13 @@ export default function Game() {
     document.activeElement.blur();
   }
 
-  function handleRestartClick() {
+  function handleCloseDialog() {
     setTriggerGameReset(true);
   }
 
   return (
     <>
-      <RestartDialog gameOutcome={gameOutcome} onClick={handleRestartClick}></RestartDialog>
+      <RestartDialog gameOutcome={gameOutcome} closeDialog={handleCloseDialog}></RestartDialog>
       <Scoreboard currentScore={currentScore} highScore={highScore}></Scoreboard>
       <Blocks
         height="80"
