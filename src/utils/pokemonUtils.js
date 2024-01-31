@@ -8,7 +8,8 @@ export async function fetchPokemon(id) {
       throw new Error(`Failed to fetch Pokemon with ID ${id}. Status: ${response.status}`);
     }
     const { species, sprites } = await response.json();
-    return { id, name: species.name, sprite: sprites.front_default };
+    const name = species.name.charAt(0).toUpperCase() + species.name.slice(1);
+    return { id, name, sprite: sprites.front_default };
   } catch (error) {
     console.error('Error fetching Pokemon:', error.message);
     throw error;
