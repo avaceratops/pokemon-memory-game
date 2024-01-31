@@ -1,5 +1,6 @@
 const MAX_POKEMON_ID = 1025;
 
+// fetches a Pokemon by ID from PokéAPI, returning its id, name, and sprite
 export async function fetchPokemon(id) {
   try {
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}/`);
@@ -14,6 +15,7 @@ export async function fetchPokemon(id) {
   }
 }
 
+// generates a given number of unique IDs from 1 to MAX_POKEMON_ID, inclusive
 export function generateRandomIds(count) {
   const ids = [];
   while (ids.length < count) {
@@ -25,7 +27,7 @@ export function generateRandomIds(count) {
   return ids;
 }
 
-/* randomize array element positions using Durstenfeld shuffle algorithm */
+// randomize array element positions using Durstenfeld shuffle algorithm
 export function shuffleArray(array) {
   const newArray = [...array];
   for (let i = newArray.length - 1; i > 0; i--) {
