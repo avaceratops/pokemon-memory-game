@@ -1,0 +1,36 @@
+.scoreboard,
+.pokemon-grid {
+  display: flex;
+}
+
+.scoreboard {
+  justify-content: space-evenly;
+
+  @media (max-width: 300px) {
+    flex-direction: column;
+
+    &__current,
+    &__high {
+      margin: 4px;
+    }
+
+    &__high {
+      margin-bottom: 16px;
+    }
+  }
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
+}
+
+.pokemon-grid {
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+
+  @media (max-width: 400px) {
+    gap: 8px;
+  }
+}

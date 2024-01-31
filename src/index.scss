@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Silkscreen&display=swap');
 
 $accent-color: #3689fc;
 
@@ -18,8 +18,8 @@ html {
 }
 
 body {
-  background-color: #242424;
-  color: rgba(255, 255, 255, 0.87);
+  background: linear-gradient(to bottom right, #242424, #171717);
+  color: rgb(255, 255, 255);
   font-family: 'Lato', sans-serif;
   min-height: 100%;
 }
