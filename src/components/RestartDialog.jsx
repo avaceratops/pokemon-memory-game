@@ -6,7 +6,7 @@ export default function RestartDialog({ gameOutcome, onClick }) {
     <Dialog.Root open={gameOutcome}>
       <Dialog.Portal>
         <Dialog.Overlay className="dialog-overlay" />
-        <Dialog.Content className="dialog">
+        <Dialog.Content className="dialog" onEscapeKeyDown={onClick}>
           <Dialog.Title className="dialog__title">Round Complete</Dialog.Title>
           <Dialog.Description className="dialog__desc">{gameOutcome}</Dialog.Description>
           <div className="button-container">
