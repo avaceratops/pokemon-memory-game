@@ -50,11 +50,11 @@ export default function Game() {
   }
 
   function handleCardClick(e) {
-    const { id } = e.currentTarget.dataset;
+    const { id, name } = e.currentTarget.dataset;
 
     if (clickedPokemon.has(id)) {
       updateHighScore(currentScore);
-      setGameOutcome(`You lost the game. See if you can beat your high score.`);
+      setGameOutcome(`You clicked ${name} twice. Try to beat your high score!`);
       return;
     }
     if (clickedPokemon.size === CARD_QUANTITY - 1) {
