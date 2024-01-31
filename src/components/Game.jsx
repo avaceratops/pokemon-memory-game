@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Blocks } from 'react-loader-spinner';
 import { generateRandomIds, fetchPokemon, shuffleArray } from '../utils/pokemonUtils';
 import Card from './Card';
+import RestartDialog from './RestartDialog';
 import Scoreboard from './Scoreboard';
 import '../styles/Game.scss';
 
@@ -13,6 +14,7 @@ export default function Game() {
   const [pokemonList, setPokemonList] = useState([]);
   const [fetchError, setFetchError] = useState(null);
   const [clickedPokemon, setClickedPokemon] = useState(new Set());
+  const [gameOutcome, setGameOutcome] = useState(null);
   const [triggerGameReset, setTriggerGameReset] = useState(true);
 
   useEffect(() => {
@@ -29,13 +31,15 @@ export default function Game() {
       }
     };
 
-    fetchData();
     resetGame();
+    fetchData();
   }, [triggerGameReset]);
 
   function resetGame() {
     setClickedPokemon(new Set());
     setCurrentScore(0);
+    setGameOutcome(null);
+    setPokemonList([]);
     setTriggerGameReset(false);
   }
 
@@ -49,15 +53,13 @@ export default function Game() {
     const { id } = e.currentTarget.dataset;
 
     if (clickedPokemon.has(id)) {
-      alert(`You lost the game!`);
       updateHighScore(currentScore);
-      setTriggerGameReset(true);
+      setGameOutcome(`You lost the game. See if you can beat your high score.`);
       return;
     }
     if (clickedPokemon.size === CARD_QUANTITY - 1) {
-      alert('You won the game!');
       updateHighScore(CARD_QUANTITY);
-      setTriggerGameReset(true);
+      setGameOutcome(`Congratulations, you managed to catch 'em all!`);
       return;
     }
 
@@ -68,8 +70,13 @@ export default function Game() {
     document.activeElement.blur();
   }
 
+  function handleRestartClick() {
+    setTriggerGameReset(true);
+  }
+
   return (
     <>
+      <RestartDialog gameOutcome={gameOutcome} onClick={handleRestartClick}></RestartDialog>
       <Scoreboard currentScore={currentScore} highScore={highScore}></Scoreboard>
       <Blocks
         height="80"
