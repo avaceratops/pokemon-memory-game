@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Blocks } from 'react-loader-spinner';
-import { generateRandomIds, fetchPokemon, shuffleArray } from '../utils/pokemonUtils';
+import usePokemonData from '../hooks/usePokemonData';
 import Card from './Card';
 import RestartDialog from './RestartDialog';
 import Scoreboard from './Scoreboard';
@@ -11,37 +11,10 @@ const CARD_QUANTITY = 30;
 export default function Game() {
   const [currentScore, setCurrentScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
-  const [pokemonList, setPokemonList] = useState([]);
-  const [fetchError, setFetchError] = useState(null);
   const [clickedPokemon, setClickedPokemon] = useState(new Set());
   const [gameOutcome, setGameOutcome] = useState(null);
-  const [triggerGameReset, setTriggerGameReset] = useState(true);
 
-  useEffect(() => {
-    if (!triggerGameReset) return;
-
-    const fetchData = async () => {
-      try {
-        const randomIds = generateRandomIds(CARD_QUANTITY);
-        const promises = randomIds.map((id) => fetchPokemon(id));
-        const fetchedPokemon = await Promise.all(promises);
-        setPokemonList(fetchedPokemon);
-      } catch (error) {
-        setFetchError('Unable to obtain Pokémon data. Try refreshing the page.');
-      }
-    };
-
-    resetGame();
-    fetchData();
-  }, [triggerGameReset]);
-
-  function resetGame() {
-    setClickedPokemon(new Set());
-    setCurrentScore(0);
-    setGameOutcome(null);
-    setPokemonList([]);
-    setTriggerGameReset(false);
-  }
+  const { pokemon, isLoading, isError, refetch, shuffle } = usePokemonData(CARD_QUANTITY);
 
   function updateHighScore(newScore) {
     if (newScore > highScore) {
@@ -65,19 +38,23 @@ export default function Game() {
 
     setClickedPokemon(new Set([...clickedPokemon, id]));
     setCurrentScore(currentScore + 1);
-    // randomise card positions after each click
-    setPokemonList(shuffleArray(pokemonList));
+    shuffle();
     document.activeElement.blur();
   }
 
   function handleCloseDialog() {
-    setTriggerGameReset(true);
+    refetch();
+    setClickedPokemon(new Set());
+    setCurrentScore(0);
+    setGameOutcome(null);
   }
 
-  return (
-    <>
-      <RestartDialog gameOutcome={gameOutcome} closeDialog={handleCloseDialog}></RestartDialog>
-      <Scoreboard currentScore={currentScore} highScore={highScore}></Scoreboard>
+  if (isError) {
+    return <p className="error-message">Unable to obtain Pokémon data. Try refreshing the page.</p>;
+  }
+
+  if (isLoading) {
+    return (
       <Blocks
         height="80"
         width="80"
@@ -85,16 +62,22 @@ export default function Game() {
         ariaLabel="blocks-loading"
         wrapperStyle={{}}
         wrapperClass="blocks-wrapper"
-        visible={!fetchError && pokemonList.length === 0}
+        visible={true}
       />
-      {fetchError && <p className="error-message">{fetchError}</p>}
+    );
+  }
+
+  return (
+    <>
+      <RestartDialog gameOutcome={gameOutcome} closeDialog={handleCloseDialog}></RestartDialog>
+      <Scoreboard currentScore={currentScore} highScore={highScore}></Scoreboard>
       <section className="pokemon-grid">
-        {pokemonList.map((pokemon) => (
+        {pokemon.map((p) => (
           <Card
-            key={pokemon.id}
-            id={pokemon.id}
-            name={pokemon.name}
-            sprite={pokemon.sprite}
+            key={p.id}
+            id={p.id}
+            name={p.name}
+            sprite={p.sprite}
             onClick={handleCardClick}
           ></Card>
         ))}
