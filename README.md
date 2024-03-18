@@ -10,7 +10,7 @@ Sprites and Pokémon names are fetched from [PokéAPI](https://pokeapi.co/) asyn
 
 ## Demo
 
-https://fanciful-gumdrop-8b306c.netlify.app/
+https://pokemon-memory-game.pages.dev/
 
 ## Getting Started
 
